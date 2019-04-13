@@ -1,0 +1,789 @@
+USE [MuOnline]
+GO
+
+------------- Table: MEMB_INFO -------------
+ALTER TABLE dbo.MEMB_INFO ADD Gold int NOT NULL DEFAULT 0 
+GO
+
+ALTER TABLE dbo.MEMB_INFO ADD Cash int NOT NULL DEFAULT 0 
+GO
+
+ALTER TABLE dbo.MEMB_INFO ADD Points int NOT NULL DEFAULT 0 
+GO
+
+ALTER TABLE dbo.MEMB_INFO ADD CTM_Date varchar(50) NULL
+GO
+
+ALTER TABLE dbo.MEMB_INFO ADD CTM_Birth varchar(50) NULL
+GO
+
+ALTER TABLE dbo.MEMB_INFO ADD CTM_Sex varchar(50) NULL
+GO
+
+ALTER TABLE dbo.MEMB_INFO ADD vip int NOT NULL DEFAULT 0 
+GO
+
+ALTER TABLE dbo.MEMB_INFO ADD VIP_Time int NOT NULL DEFAULT 0 
+GO
+
+ALTER TABLE dbo.MEMB_INFO ADD VIP_Begin int NOT NULL DEFAULT 0 
+GO
+
+ALTER TABLE dbo.MEMB_INFO ADD VIP_Integer int NOT NULL DEFAULT 0 
+GO
+
+------------- Table: Character -------------
+ALTER TABLE dbo.Character ADD CTM_Image varchar(50) NULL
+GO
+
+ALTER TABLE dbo.Character ADD Resets int NOT NULL DEFAULT 0 
+GO
+
+ALTER TABLE dbo.Character ADD resetsDay int NOT NULL DEFAULT 0 
+GO
+
+ALTER TABLE dbo.Character ADD resetsWeek int NOT NULL DEFAULT 0 
+GO
+
+ALTER TABLE dbo.Character ADD resetsMonth int NOT NULL DEFAULT 0 
+GO
+
+ALTER TABLE dbo.Character ADD MResets int NOT NULL DEFAULT 0 
+GO
+
+ALTER TABLE dbo.Character ADD PkCountWeb int NOT NULL DEFAULT 0 
+GO
+
+ALTER TABLE dbo.Character ADD HeroCountWeb int NOT NULL DEFAULT 0 
+GO
+
+UPDATE [MuOnline].[dbo].[MEMB_INFO] SET [mail_chek] = 1
+GO
+
+/*
+//##############################################//
+// -> Effect Web                                //
+// -> Powered by Erick-Master                   //
+// -> CTM TEAM Softwares                        //
+// -> www.ctmts.com.br                          //
+//##############################################//
+*/
+
+USE [master]
+GO
+sp_addextendedproc 'XP_MD5_EncodeKeyVal', 'WZ_MD5_MOD.dll'
+GO
+sp_addextendedproc 'XP_MD5_CheckValue', 'WZ_MD5_MOD.dll'
+GO
+
+/* Os dados do Site serão Armazenados nessa DataBase */
+CREATE DATABASE [CTM_TeaM]
+GO
+
+USE [CTM_TeaM]
+GO
+
+CREATE TABLE [dbo].[CTM_WebAccBan] (
+	[Account] [varchar] (50) COLLATE Latin1_General_CI_AS NOT NULL ,
+	[Responsible] [varchar] (50) COLLATE Latin1_General_CI_AS NULL ,
+	[Reason] [varchar] (50) COLLATE Latin1_General_CI_AS NOT NULL ,
+	[Time] [int] NOT NULL 
+) ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[CTM_WebChangeMail] (
+	[Id] [int] IDENTITY (1, 1) NOT NULL ,
+	[Account] [varchar] (50) COLLATE Latin1_General_CI_AS NOT NULL ,
+	[Mail] [varchar] (50) COLLATE Latin1_General_CI_AS NOT NULL ,
+	[HashCode] [varbinary] (1000) NOT NULL ,
+	[Expiration] [int] NOT NULL ,
+	[Status] [varbinary] (6) NOT NULL 
+) ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[CTM_WebCharBan] (
+	[Character] [varchar] (50) COLLATE Latin1_General_CI_AS NOT NULL ,
+	[Responsible] [varchar] (50) COLLATE Latin1_General_CI_AS NULL ,
+	[Reason] [varchar] (50) COLLATE Latin1_General_CI_AS NOT NULL ,
+	[Time] [int] NOT NULL 
+) ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[CTM_WebCronJob] (
+	[Id] [int] IDENTITY (1, 1) NOT NULL ,
+	[CronTab] [int] NOT NULL ,
+	[Cron_Time] [varchar] (50) COLLATE Latin1_General_CI_AS NOT NULL ,
+	[Cron_Next] [int] NOT NULL ,
+	[Coin] [int] NOT NULL ,
+	[Number] [int] NOT NULL 
+) ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[CTM_WebFiles] (
+	[id] [int] IDENTITY (1, 1) NOT NULL ,
+	[name] [varchar] (50) COLLATE Latin1_General_CI_AS NULL ,
+	[link] [varchar] (300) COLLATE Latin1_General_CI_AS NULL ,
+	[description] [varchar] (50) COLLATE Latin1_General_CI_AS NULL ,
+	[file_size] [varchar] (50) COLLATE Latin1_General_CI_AS NULL 
+) ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[CTM_WebNews] (
+	[Id] [int] IDENTITY (1, 1) NOT NULL ,
+	[Title] [varchar] (50) COLLATE Latin1_General_CI_AS NOT NULL ,
+	[Date] [int] NOT NULL ,
+	[Account] [varchar] (50) COLLATE Latin1_General_CI_AS NOT NULL ,
+	[Text] [text] COLLATE Latin1_General_CI_AS NOT NULL ,
+	[Comment] [int] NOT NULL 
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[CTM_WebNewsComments] (
+	[Id] [int] IDENTITY (1, 1) NOT NULL ,
+	[NoticeID] [int] NOT NULL ,
+	[Account] [varchar] (50) COLLATE Latin1_General_CI_AS NOT NULL ,
+	[User_Char] [varchar] (50) COLLATE Latin1_General_CI_AS NOT NULL ,
+	[Comment_Date] [int] NOT NULL ,
+	[Text] [text] COLLATE Latin1_General_CI_AS NOT NULL 
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[CTM_WebPaymentRes] (
+	[Id] [int] IDENTITY (1, 1) NOT NULL ,
+	[Date] [varchar] (50) COLLATE Latin1_General_CI_AS NOT NULL ,
+	[Character] [varchar] (50) COLLATE Latin1_General_CI_AS NOT NULL ,
+	[PaymentID] [int] NOT NULL ,
+	[Text] [text] COLLATE Latin1_General_CI_AS NOT NULL 
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[CTM_WebPayments] (
+	[Id] [int] IDENTITY (1, 1) NOT NULL ,
+	[Account] [varchar] (50) COLLATE Latin1_General_CI_AS NOT NULL ,
+	[Character] [varchar] (50) COLLATE Latin1_General_CI_AS NOT NULL ,
+	[Status] [int] NOT NULL ,
+	[Time] [int] NOT NULL ,
+	[Golds] [int] NOT NULL ,
+	[Price] [varchar] (50) COLLATE Latin1_General_CI_AS NOT NULL ,
+	[Date] [varchar] (50) COLLATE Latin1_General_CI_AS NOT NULL ,
+	[Bank] [varchar] (50) COLLATE Latin1_General_CI_AS NOT NULL ,
+	[Payment] [varchar] (50) COLLATE Latin1_General_CI_AS NOT NULL ,
+	[Master] [varchar] (50) COLLATE Latin1_General_CI_AS NOT NULL ,
+	[Document] [varchar] (50) COLLATE Latin1_General_CI_AS NOT NULL ,
+	[Text] [text] COLLATE Latin1_General_CI_AS NULL 
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[CTM_WebPoll] (
+	[Id] [int] IDENTITY (1, 1) NOT NULL ,
+	[Question] [varchar] (100) COLLATE Latin1_General_CI_AS NOT NULL ,
+	[Time_] [int] NOT NULL ,
+	[Expiration] [int] NOT NULL ,
+	[Status] [varbinary] (6) NOT NULL 
+) ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[CTM_WebPollAnswers] (
+	[Id] [int] IDENTITY (1, 1) NOT NULL ,
+	[Poll_ID] [int] NOT NULL ,
+	[Answer] [varchar] (100) COLLATE Latin1_General_CI_AS NOT NULL ,
+	[Votes] [int] NOT NULL 
+) ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[CTM_WebPollVotes] (
+	[Id] [int] IDENTITY (1, 1) NOT NULL ,
+	[Account] [varchar] (50) COLLATE Latin1_General_CI_AS NOT NULL ,
+	[Poll_ID] [int] NOT NULL ,
+	[Expiration] [int] NOT NULL 
+) ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[CTM_WebProfile] (
+	[Character] [varchar] (50) COLLATE Latin1_General_CI_AS NULL ,
+	[Status] [int] NOT NULL 
+) ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[CTM_WebRaffles] (
+	[Id] [int] IDENTITY (1, 1) NOT NULL ,
+	[MuCharacter] [varchar] (50) COLLATE Latin1_General_CI_AS NOT NULL ,
+	[Coin] [int] NOT NULL ,
+	[Award] [int] NOT NULL ,
+	[Raffle_Date] [varchar] (50) COLLATE Latin1_General_CI_AS NOT NULL ,
+	[Raffle_Time] [varchar] (50) COLLATE Latin1_General_CI_AS NOT NULL 
+) ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[CTM_WebRecord] (
+	[Id] [int] IDENTITY (1, 1) NOT NULL ,
+	[Record] [int] NOT NULL ,
+	[Data] [int] NOT NULL ,
+	[Type] [int] NOT NULL 
+) ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[CTM_WebRecovery] (
+	[Account] [varchar] (50) COLLATE Latin1_General_CI_AS NOT NULL ,
+	[Mail] [varchar] (50) COLLATE Latin1_General_CI_AS NOT NULL ,
+	[HashCode] [varbinary] (2000) NOT NULL ,
+	[Time_] [int] NOT NULL ,
+	[Expiration] [int] NOT NULL ,
+	[Status] [varbinary] (6) NOT NULL 
+) ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[CTM_WebReference] (
+	[Id] [int] IDENTITY (1, 1) NOT NULL ,
+	[Account] [varchar] (50) COLLATE Latin1_General_CI_AS NOT NULL ,
+	[AccessCount] [int] NOT NULL ,
+	[RegisterCount] [int] NOT NULL ,
+	[Points] [int] NOT NULL ,
+	[EventCurrentResult] [int] NOT NULL 
+) ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[CTM_WebReferenceData] (
+	[Reference] [int] NOT NULL ,
+	[RefLogin] [varchar] (50) COLLATE Latin1_General_CI_AS NOT NULL ,
+	[Account] [varchar] (50) COLLATE Latin1_General_CI_AS NOT NULL ,
+	[IPAddress] [varchar] (50) COLLATE Latin1_General_CI_AS NOT NULL 
+) ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[CTM_WebRegister] (
+	[Id] [int] IDENTITY (1, 1) NOT NULL ,
+	[Account] [varchar] (50) COLLATE Latin1_General_CI_AS NOT NULL ,
+	[Temp_Account] [varchar] (50) COLLATE Latin1_General_CI_AS NOT NULL ,
+	[HashCode] [varbinary] (1000) NOT NULL ,
+	[Status] [varbinary] (50) NOT NULL 
+) ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[CTM_WebScreenComments] (
+	[Id] [int] IDENTITY (1, 1) NOT NULL ,
+	[ScreenID] [int] NOT NULL ,
+	[Account] [varchar] (50) COLLATE Latin1_General_CI_AS NOT NULL ,
+	[User_Char] [varchar] (50) COLLATE Latin1_General_CI_AS NOT NULL ,
+	[Comment_Date] [int] NOT NULL ,
+	[Text] [text] COLLATE Latin1_General_CI_AS NOT NULL 
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[CTM_WebScreenShots] (
+	[Id] [int] IDENTITY (1, 1) NOT NULL ,
+	[Account] [varchar] (50) COLLATE Latin1_General_CI_AS NOT NULL ,
+	[User_Char] [varchar] (50) COLLATE Latin1_General_CI_AS NOT NULL ,
+	[Votes] [int] NOT NULL ,
+	[Up_Date] [int] NOT NULL ,
+	[Description] [text] COLLATE Latin1_General_CI_AS NOT NULL ,
+	[ScreenShot] [varchar] (1000) COLLATE Latin1_General_CI_AS NOT NULL 
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[CTM_WebScreenVotes] (
+	[Id] [int] IDENTITY (1, 1) NOT NULL ,
+	[Account] [varchar] (50) COLLATE Latin1_General_CI_AS NOT NULL ,
+	[Vote] [int] NOT NULL ,
+	[ScreenID] [int] NOT NULL 
+) ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[CTM_WebStaff] (
+	[id] [int] IDENTITY (1, 1) NOT NULL ,
+	[account] [varchar] (50) COLLATE Latin1_General_CI_AS NULL ,
+	[name] [varchar] (50) COLLATE Latin1_General_CI_AS NULL ,
+	[type] [int] NOT NULL ,
+	[contact] [varchar] (50) COLLATE Latin1_General_CI_AS NULL 
+) ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[CTM_WebTicketRes] (
+	[Id] [int] IDENTITY (1, 1) NOT NULL ,
+	[Date] [varchar] (50) COLLATE Latin1_General_CI_AS NOT NULL ,
+	[Character] [varchar] (50) COLLATE Latin1_General_CI_AS NOT NULL ,
+	[TicketID] [int] NOT NULL ,
+	[Text] [text] COLLATE Latin1_General_CI_AS NOT NULL 
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[CTM_WebTickets] (
+	[Id] [int] IDENTITY (1, 1) NOT NULL ,
+	[Protocol] [varchar] (50) COLLATE Latin1_General_CI_AS NOT NULL ,
+	[Title] [varchar] (50) COLLATE Latin1_General_CI_AS NOT NULL ,
+	[Subject] [varchar] (50) COLLATE Latin1_General_CI_AS NOT NULL ,
+	[Date] [varchar] (50) COLLATE Latin1_General_CI_AS NOT NULL ,
+	[Status] [int] NOT NULL ,
+	[Account] [varchar] (50) COLLATE Latin1_General_CI_AS NOT NULL ,
+	[Character] [varchar] (50) COLLATE Latin1_General_CI_AS NOT NULL ,
+	[Text] [text] COLLATE Latin1_General_CI_AS NOT NULL 
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[CTM_WebVIP] (
+	[Account] [varchar] (50) COLLATE Latin1_General_CI_AS NOT NULL ,
+	[VIP_Type] [int] NOT NULL ,
+	[VIP_Begin] [int] NOT NULL ,
+	[VIP_Time] [int] NOT NULL ,
+	[VIP_Credits] [int] NOT NULL 
+) ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[CTM_WebWarning] (
+	[Date] [int] NOT NULL ,
+	[Account] [varchar] (50) COLLATE Latin1_General_CI_AS NOT NULL ,
+	[Text] [text] COLLATE Latin1_General_CI_AS NOT NULL 
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+
+ALTER TABLE [dbo].[CTM_WebCronJob] ADD 
+	CONSTRAINT [DF_CTM_WebCronJob_Cron_Next] DEFAULT (0) FOR [Cron_Next],
+	CONSTRAINT [DF_CTM_WebCronJob_Coin] DEFAULT (1) FOR [Coin],
+	CONSTRAINT [DF_CTM_WebCronJob_Number] DEFAULT (0) FOR [Number]
+GO
+
+ALTER TABLE [dbo].[CTM_WebNews] ADD 
+	CONSTRAINT [DF_CTM_WebNews_Comment] DEFAULT (1) FOR [Comment]
+GO
+
+ALTER TABLE [dbo].[CTM_WebProfile] ADD 
+	CONSTRAINT [DF_CTM_WebProfile_Status] DEFAULT (1) FOR [Status]
+GO
+
+ALTER TABLE [dbo].[CTM_WebRaffles] ADD 
+	CONSTRAINT [DF_CTM_WebRaffles_Coin] DEFAULT (1) FOR [Coin]
+GO
+
+ALTER TABLE [dbo].[CTM_WebRecord] ADD 
+	CONSTRAINT [DF_CTM_WebRecord_record] DEFAULT (0) FOR [Record],
+	CONSTRAINT [DF_CTM_WebRecord_Type] DEFAULT (1) FOR [Type]
+GO
+
+ALTER TABLE [dbo].[CTM_WebReference] ADD 
+	CONSTRAINT [DF_CTM_MuReference_LinkCount] DEFAULT (0) FOR [AccessCount],
+	CONSTRAINT [DF_CTM_MuReference_RegisterCount] DEFAULT (0) FOR [RegisterCount],
+	CONSTRAINT [DF_CTM_MuReference_Points] DEFAULT (0) FOR [Points],
+	CONSTRAINT [DF_CTM_MuReference_EventCurrentResult] DEFAULT (0) FOR [EventCurrentResult]
+GO
+
+ALTER TABLE [dbo].[CTM_WebScreenShots] ADD 
+	CONSTRAINT [DF_CTM_WebScreenShots_Votes] DEFAULT (0) FOR [Votes],
+	CONSTRAINT [DF_CTM_WebScreenShots_Description] DEFAULT (null) FOR [Description]
+GO
+
+ALTER TABLE [dbo].[CTM_WebScreenVotes] ADD 
+	CONSTRAINT [DF_CTM_WebScreenVotes_Votes] DEFAULT (0) FOR [Vote]
+GO
+
+ALTER TABLE [dbo].[CTM_WebStaff] ADD 
+	CONSTRAINT [DF_CTM_WebStaff_type] DEFAULT (0) FOR [type]
+GO
+
+ALTER TABLE [dbo].[CTM_WebVIP] ADD 
+	CONSTRAINT [DF_CTM_WebVIP_VIP_Type] DEFAULT (0) FOR [VIP_Type],
+	CONSTRAINT [DF_CTM_WebVIP_VIP_Begin] DEFAULT (0) FOR [VIP_Begin],
+	CONSTRAINT [DF_CTM_WebVIP_VIP_Time] DEFAULT (0) FOR [VIP_Time],
+	CONSTRAINT [DF_CTM_WebVIP_VIP_Credits] DEFAULT (0) FOR [VIP_Credits]
+GO
+
+-- Reset Record Day in 24 Hour
+-- DataBase: CTM_TeaM
+
+BEGIN TRANSACTION            
+  DECLARE @JobID BINARY(16)  
+  DECLARE @ReturnCode INT    
+  SELECT @ReturnCode = 0     
+IF (SELECT COUNT(*) FROM msdb.dbo.syscategories WHERE name = N'[Uncategorized (Local)]') < 1 
+  EXECUTE msdb.dbo.sp_add_category @name = N'[Uncategorized (Local)]'
+
+  -- Delete the job with the same name (if it exists)
+  SELECT @JobID = job_id     
+  FROM   msdb.dbo.sysjobs    
+  WHERE (name = N'CTM_WebRecord')       
+  IF (@JobID IS NOT NULL)    
+  BEGIN  
+  -- Check if the job is a multi-server job  
+  IF (EXISTS (SELECT  * 
+              FROM    msdb.dbo.sysjobservers 
+              WHERE   (job_id = @JobID) AND (server_id <> 0))) 
+  BEGIN 
+    -- There is, so abort the script 
+    RAISERROR (N'Unable to import job ''CTM_WebRecord'' since there is already a multi-server job with this name.', 16, 1) 
+    GOTO QuitWithRollback  
+  END 
+  ELSE 
+    -- Delete the [local] job 
+    EXECUTE msdb.dbo.sp_delete_job @job_name = N'CTM_WebRecord' 
+    SELECT @JobID = NULL
+  END 
+
+BEGIN 
+
+  -- Add the job
+  EXECUTE @ReturnCode = msdb.dbo.sp_add_job @job_id = @JobID OUTPUT , @job_name = N'CTM_WebRecord', @description = N'No description available.', @category_name = N'[Uncategorized (Local)]', @enabled = 1, @notify_level_email = 0, @notify_level_page = 0, @notify_level_netsend = 0, @notify_level_eventlog = 2, @delete_level= 0
+  IF (@@ERROR <> 0 OR @ReturnCode <> 0) GOTO QuitWithRollback 
+
+  -- Add the job steps
+  EXECUTE @ReturnCode = msdb.dbo.sp_add_jobstep @job_id = @JobID, @step_id = 1, @step_name = N'Reset Record Day', @command = N'UPDATE CTM_TeaM.dbo.CTM_WebRecord SET Record=0 WHERE Type=2', @database_name = N'CTM_TeaM', @server = N'', @database_user_name = N'', @subsystem = N'TSQL', @cmdexec_success_code = 0, @flags = 0, @retry_attempts = 0, @retry_interval = 1, @output_file_name = N'', @on_success_step_id = 0, @on_success_action = 1, @on_fail_step_id = 0, @on_fail_action = 2
+  IF (@@ERROR <> 0 OR @ReturnCode <> 0) GOTO QuitWithRollback 
+  EXECUTE @ReturnCode = msdb.dbo.sp_update_job @job_id = @JobID, @start_step_id = 1 
+
+  IF (@@ERROR <> 0 OR @ReturnCode <> 0) GOTO QuitWithRollback 
+
+  -- Add the job schedules
+  EXECUTE @ReturnCode = msdb.dbo.sp_add_jobschedule @job_id = @JobID, @name = N'Reset Record Day in 24 Hour', @enabled = 1, @freq_type = 4, @active_start_date = 20110220, @active_start_time = 0, @freq_interval = 1, @freq_subday_type = 8, @freq_subday_interval = 24, @freq_relative_interval = 0, @freq_recurrence_factor = 0, @active_end_date = 99991231, @active_end_time = 235959
+  IF (@@ERROR <> 0 OR @ReturnCode <> 0) GOTO QuitWithRollback 
+
+  -- Add the Target Servers
+  EXECUTE @ReturnCode = msdb.dbo.sp_add_jobserver @job_id = @JobID, @server_name = N'(local)' 
+  IF (@@ERROR <> 0 OR @ReturnCode <> 0) GOTO QuitWithRollback 
+
+END
+COMMIT TRANSACTION          
+GOTO   EndSave              
+QuitWithRollback:
+  IF (@@TRANCOUNT > 0) ROLLBACK TRANSACTION 
+EndSave:
+
+BEGIN TRANSACTION    
+
+BEGIN TRANSACTION            
+  DECLARE @JobID BINARY(16)  
+  DECLARE @ReturnCode INT    
+  SELECT @ReturnCode = 0     
+IF (SELECT COUNT(*) FROM msdb.dbo.syscategories WHERE name = N'[Uncategorized (Local)]') < 1 
+  EXECUTE msdb.dbo.sp_add_category @name = N'[Uncategorized (Local)]'
+
+  -- Delete the job with the same name (if it exists)
+  SELECT @JobID = job_id     
+  FROM   msdb.dbo.sysjobs    
+  WHERE (name = N'CTM_VIPSystem')       
+  IF (@JobID IS NOT NULL)    
+  BEGIN  
+  -- Check if the job is a multi-server job  
+  IF (EXISTS (SELECT  * 
+              FROM    msdb.dbo.sysjobservers 
+              WHERE   (job_id = @JobID) AND (server_id <> 0))) 
+  BEGIN 
+    -- There is, so abort the script 
+    RAISERROR (N'Unable to import job ''CTM_VIPSystem'' since there is already a multi-server job with this name.', 16, 1) 
+    GOTO QuitWithRollback  
+  END 
+  ELSE 
+    -- Delete the [local] job 
+    EXECUTE msdb.dbo.sp_delete_job @job_name = N'CTM_VIPSystem' 
+    SELECT @JobID = NULL
+  END 
+
+BEGIN 
+
+  -- Add the job
+  EXECUTE @ReturnCode = msdb.dbo.sp_add_job @job_id = @JobID OUTPUT , @job_name = N'CTM_VIPSystem', @description = N'No description available.', @category_name = N'[Uncategorized (Local)]', @enabled = 1, @notify_level_email = 0, @notify_level_page = 0, @notify_level_netsend = 0, @notify_level_eventlog = 2, @delete_level= 0
+  IF (@@ERROR <> 0 OR @ReturnCode <> 0) GOTO QuitWithRollback 
+
+  -- Add the job steps
+  EXECUTE @ReturnCode = msdb.dbo.sp_add_jobstep @job_id = @JobID, @step_id = 1, @step_name = N'EW_VIPSystem', @command = N'UPDATE CTM_TeaM.dbo.CTM_WebVIP SET VIP_Credits = VIP_Credits - 1 WHERE VIP_Type > 0 AND VIP_Credits > 0;
+UPDATE CTM_TeaM.dbo.CTM_WebVIP SET VIP_Type = 0, VIP_Begin = 0, VIP_Time = 0, VIP_Credits = 0 WHERE VIP_Type > 0 AND VIP_Credits < 1;', @database_name = N'CTM_TeaM', @server = N'', @database_user_name = N'', @subsystem = N'TSQL', @cmdexec_success_code = 0, @flags = 0, @retry_attempts = 0, @retry_interval = 1, @output_file_name = N'', @on_success_step_id = 0, @on_success_action = 1, @on_fail_step_id = 0, @on_fail_action = 2
+  IF (@@ERROR <> 0 OR @ReturnCode <> 0) GOTO QuitWithRollback 
+  EXECUTE @ReturnCode = msdb.dbo.sp_update_job @job_id = @JobID, @start_step_id = 1 
+
+  IF (@@ERROR <> 0 OR @ReturnCode <> 0) GOTO QuitWithRollback 
+
+  -- Add the job schedules
+  EXECUTE @ReturnCode = msdb.dbo.sp_add_jobschedule @job_id = @JobID, @name = N'EW_Time_Command', @enabled = 1, @freq_type = 4, @active_start_date = 20110629, @active_start_time = 235800, @freq_interval = 1, @freq_subday_type = 1, @freq_subday_interval = 0, @freq_relative_interval = 0, @freq_recurrence_factor = 0, @active_end_date = 99991231, @active_end_time = 235959
+  IF (@@ERROR <> 0 OR @ReturnCode <> 0) GOTO QuitWithRollback 
+
+  -- Add the Target Servers
+  EXECUTE @ReturnCode = msdb.dbo.sp_add_jobserver @job_id = @JobID, @server_name = N'(local)' 
+  IF (@@ERROR <> 0 OR @ReturnCode <> 0) GOTO QuitWithRollback 
+
+END
+COMMIT TRANSACTION          
+GOTO   EndSave              
+QuitWithRollback:
+  IF (@@TRANCOUNT > 0) ROLLBACK TRANSACTION 
+EndSave: 
+
+BEGIN TRANSACTION    
+
+BEGIN TRANSACTION            
+  DECLARE @JobID BINARY(16)  
+  DECLARE @ReturnCode INT    
+  SELECT @ReturnCode = 0     
+IF (SELECT COUNT(*) FROM msdb.dbo.syscategories WHERE name = N'[Uncategorized (Local)]') < 1 
+  EXECUTE msdb.dbo.sp_add_category @name = N'[Uncategorized (Local)]'
+
+  -- Delete the job with the same name (if it exists)
+  SELECT @JobID = job_id     
+  FROM   msdb.dbo.sysjobs    
+  WHERE (name = N'CTM_VIPSystem')       
+  IF (@JobID IS NOT NULL)    
+  BEGIN  
+  -- Check if the job is a multi-server job  
+  IF (EXISTS (SELECT  * 
+              FROM    msdb.dbo.sysjobservers 
+              WHERE   (job_id = @JobID) AND (server_id <> 0))) 
+  BEGIN 
+    -- There is, so abort the script 
+    RAISERROR (N'Unable to import job ''CTM_VIPSystem'' since there is already a multi-server job with this name.', 16, 1) 
+    GOTO QuitWithRollback  
+  END 
+  ELSE 
+    -- Delete the [local] job 
+    EXECUTE msdb.dbo.sp_delete_job @job_name = N'CTM_VIPSystem' 
+    SELECT @JobID = NULL
+  END 
+
+BEGIN 
+
+  -- Add the job
+  EXECUTE @ReturnCode = msdb.dbo.sp_add_job @job_id = @JobID OUTPUT , @job_name = N'CTM_VIPSystem', @description = N'No description available.', @category_name = N'[Uncategorized (Local)]', @enabled = 1, @notify_level_email = 0, @notify_level_page = 0, @notify_level_netsend = 0, @notify_level_eventlog = 2, @delete_level= 0
+  IF (@@ERROR <> 0 OR @ReturnCode <> 0) GOTO QuitWithRollback 
+
+  -- Add the job steps
+  EXECUTE @ReturnCode = msdb.dbo.sp_add_jobstep @job_id = @JobID, @step_id = 1, @step_name = N'EW_VIPSystem', @command = N'UPDATE CTM_TeaM.dbo.CTM_WebVIP SET VIP_Credits = VIP_Credits - 1 WHERE VIP_Type > 0 AND VIP_Credits > 0;
+UPDATE CTM_TeaM.dbo.CTM_WebVIP SET VIP_Type = 0, VIP_Begin = 0, VIP_Time = 0, VIP_Credits = 0 WHERE VIP_Type > 0 AND VIP_Credits < 1;', @database_name = N'CTM_TeaM', @server = N'', @database_user_name = N'', @subsystem = N'TSQL', @cmdexec_success_code = 0, @flags = 0, @retry_attempts = 0, @retry_interval = 1, @output_file_name = N'', @on_success_step_id = 0, @on_success_action = 1, @on_fail_step_id = 0, @on_fail_action = 2
+  IF (@@ERROR <> 0 OR @ReturnCode <> 0) GOTO QuitWithRollback 
+  EXECUTE @ReturnCode = msdb.dbo.sp_update_job @job_id = @JobID, @start_step_id = 1 
+
+  IF (@@ERROR <> 0 OR @ReturnCode <> 0) GOTO QuitWithRollback 
+
+  -- Add the job schedules
+  EXECUTE @ReturnCode = msdb.dbo.sp_add_jobschedule @job_id = @JobID, @name = N'EW_Time_Command', @enabled = 1, @freq_type = 4, @active_start_date = 20110629, @active_start_time = 235800, @freq_interval = 1, @freq_subday_type = 1, @freq_subday_interval = 0, @freq_relative_interval = 0, @freq_recurrence_factor = 0, @active_end_date = 99991231, @active_end_time = 235959
+  IF (@@ERROR <> 0 OR @ReturnCode <> 0) GOTO QuitWithRollback 
+
+  -- Add the Target Servers
+  EXECUTE @ReturnCode = msdb.dbo.sp_add_jobserver @job_id = @JobID, @server_name = N'(local)' 
+  IF (@@ERROR <> 0 OR @ReturnCode <> 0) GOTO QuitWithRollback 
+
+END
+COMMIT TRANSACTION          
+GOTO   EndSave              
+QuitWithRollback:
+  IF (@@TRANCOUNT > 0) ROLLBACK TRANSACTION 
+EndSave: 
+
+
+USE [CTM_TeaM]
+GO
+
+if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[CTM_CreateCharacter]') and OBJECTPROPERTY(id, N'IsProcedure') = 1)
+drop procedure [dbo].[CTM_CreateCharacter]
+GO
+
+SET QUOTED_IDENTIFIER OFF 
+GO
+SET ANSI_NULLS ON 
+GO
+
+-----------------------------------------------------------
+-- Effect Web MuOnline
+-- CTM_CreateCharacter
+-- Release 30/06/2011
+-- Powered by Erick-Master
+-- Base in WZ_CreateCharacter
+-----------------------------------------------------------
+
+CREATE  Procedure CTM_CreateCharacter 
+	@AccountID		varchar(10),	-- // Account Character
+	@Name			varchar(10),	-- // Name Character
+	@Class			tinyint,	-- // Class Character
+	@Level			int,		-- // Level Character
+	@Points			int,		-- // Points Character
+	@Strength		int,		-- // Strength Character
+	@Dexterity		int,		-- // Dexterity Character
+	@Vitality		int,		-- // Vitality Character
+	@Energy			int,		-- // Energy Character
+	@Money			int,		-- // Money Character
+	@CtlCode		int,		-- // CtlCode Character
+	@Version		int		-- // Mu Version [Old=0] [New=1]
+AS
+Begin
+
+	SET NOCOUNT ON
+	SET	XACT_ABORT ON
+	DECLARE		@Result		tinyint
+
+	/***********************************************************************
+	//	@ Check Name Exists
+	***********************************************************************/
+	If EXISTS ( SELECT  Name  FROM  MuOnline.dbo.Character WHERE Name = @Name )
+	begin
+		SET @Result	= 0x01		-- // Error Binarry
+		GOTO ProcEnd						
+	end 
+
+	BEGIN TRAN
+	/***********************************************************************
+	//	@ Procedure AccountCharacter
+	***********************************************************************/
+	If NOT EXISTS ( SELECT  Id  FROM  MuOnline.dbo.AccountCharacter WHERE Id = @AccountID )
+		begin
+			INSERT INTO MuOnline.dbo.AccountCharacter(Id, GameID1, GameID2, GameID3, GameID4, GameID5, GameIDC) 
+			VALUES(@AccountID, @Name, NULL, NULL, NULL, NULL, NULL)
+
+			SET @Result  = @@Error
+		end 
+	else
+		begin
+			-- // Select Game ID From AccountID
+			Declare @GameID1 varchar(10), @GameID2 varchar(10), @GameID3 varchar(10), @GameID4 varchar(10), @GameID5 varchar(10)						
+			SELECT @GameID1=GameID1, @GameID2=GameID2, @GameID3=GameID3, @GameID4=GameID4, @GameID5=GameID5 FROM MuOnline.dbo.AccountCharacter WHERE Id = @AccountID 			
+
+			if( ( @GameID1 Is NULL) OR (Len(@GameID1) = 0))
+				begin
+					UPDATE MuOnline.dbo.AccountCharacter SET  GameID1 = @Name
+					WHERE Id = @AccountID
+										
+					SET @Result  = @@Error
+				end 
+			else	 if( @GameID2  Is NULL OR Len(@GameID2) = 0)
+				begin
+					UPDATE MuOnline.dbo.AccountCharacter SET  GameID2 = @Name
+					WHERE Id = @AccountID
+
+					SET @Result  = @@Error
+				end 
+			else	 if( @GameID3  Is NULL OR Len(@GameID3) = 0)
+				begin			
+					UPDATE MuOnline.dbo.AccountCharacter SET  GameID3 = @Name
+					WHERE Id = @AccountID
+
+					SET @Result  = @@Error
+				end 
+			else	 if( @GameID4 Is NULL OR Len(@GameID4) = 0)
+				begin
+					UPDATE MuOnline.dbo.AccountCharacter SET  GameID4 = @Name
+					WHERE Id = @AccountID
+
+					SET @Result  = @@Error
+				end 
+			else	 if( @GameID5 Is NULL OR Len(@GameID5) = 0)
+				begin
+					UPDATE MuOnline.dbo.AccountCharacter SET  GameID5 = @Name
+					WHERE Id = @AccountID
+
+					SET @Result  = @@Error
+				end 		
+			else 
+				begin					
+					SET @Result	= 0x03	-- // Error Binarry						
+					GOTO TranProcEnd								
+				end 			 
+		end 
+
+	
+	/***********************************************************************
+	//	@ Procedure Mu Version
+	***********************************************************************/
+	DECLARE @DbVersion int;
+
+	if(@Version = 0)
+	BEGIN
+		SET @DbVersion = 1;
+	END
+	else
+	BEGIN
+		SET @DbVersion = 3;
+	END
+
+	/***********************************************************************
+	//	@ Procedure Character Class
+	***********************************************************************/
+	DECLARE @MapNumber int;
+	DECLARE @MapPosX int;
+	DECLARE @MapPosY int;
+	
+	if(@Class = 32 or @Class = 33 or @Class = 34 or @Class = 35)
+	BEGIN
+		SET @MapNumber = 3;
+		SET @MapPosY = 174;
+		SET @MapPosY = 111;
+	END
+	else
+	BEGIN
+		SET @MapNumber = 0;
+		SET @MapPosY = 125;
+		SET @MapPosY = 125;
+	END
+
+	/***********************************************************************
+	//	@ Procedure Character
+	***********************************************************************/
+	if( @Result <> 0 )
+		begin
+			GOTO TranProcEnd		
+		end 
+	else
+		begin
+			INSERT INTO MuOnline.dbo.Character(AccountID, Name, cLevel, LevelUpPoint, Class, Strength, Dexterity, Vitality, Energy, Inventory,MagicList, 
+					Life, MaxLife, Mana, MaxMana, MapNumber, MapPosX, MapPosY,  MDate, LDate, Quest, DbVersion, Money, CtlCode ) VALUES
+				
+			(@AccountID,@Name,@Level,@Points,@Class,@Strength,@Dexterity,@Vitality,@Energy,NULL,NULL,
+			'80.0','80.0','30.0','30.0',@MapNumber,@MapPosX,@MapPosY,getdate(),getdate(),NULL,@DbVersion,@Money,@CtlCode)
+
+			SET @Result  = @@Error
+		end 
+
+TranProcEnd:	-- GOTO
+	IF ( @Result  <> 0 )
+		ROLLBACK TRAN
+	ELSE
+		COMMIT	TRAN
+
+ProcEnd:
+	SET NOCOUNT OFF
+	SET	XACT_ABORT OFF
+
+	/***********************************************************************
+	//	@ Finish Procedure
+	***********************************************************************/
+	SELECT
+	   CASE @Result
+	      WHEN 0x00 THEN 0x01		-- // Character Exists
+	      WHEN 0x01 THEN 0x00		-- // Success
+	      WHEN 0x03 THEN 0x03		-- // GameID Not Empty
+	      ELSE 0x02
+	   END AS Result 
+End
+GO
+SET QUOTED_IDENTIFIER OFF 
+GO
+SET ANSI_NULLS ON 
+GO
+
+USE [CTM_TeaM]
+GO
+
+if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[CTM_CryptPwd]') and OBJECTPROPERTY(id, N'IsProcedure') = 1)
+drop procedure [dbo].[CTM_CryptPwd]
+GO
+
+SET QUOTED_IDENTIFIER ON 
+GO
+SET ANSI_NULLS ON 
+GO
+
+-----------------------------------------------------------
+-- Effect Web MuOnline
+-- CTM_CheckLogin
+-- Release 30/06/2011
+-- Powered by Erick-Master
+-----------------------------------------------------------
+
+CREATE PROCEDURE [dbo].[CTM_CryptPwd]
+@Account VARCHAR(10),
+@Password VARCHAR(10)
+AS
+BEGIN
+
+DECLARE @Hash BINARY(16);
+EXEC master..XP_MD5_EncodeKeyVal @Password, @Account, @Hash OUT;
+UPDATE MuOnline.dbo.MEMB_INFO SET memb__pwd = @Hash WHERE memb___id = @Account;
+
+END
+GO
+SET QUOTED_IDENTIFIER OFF 
+GO
+SET ANSI_NULLS ON 
+GO

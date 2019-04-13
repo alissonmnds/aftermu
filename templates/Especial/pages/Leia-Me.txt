@@ -1,0 +1,62 @@
+// ----------------------------------------------------\\
+//        Hospedagem feita por Rodrigo                 \\
+// 						       \\
+// ViciadosMU:      wWw.ViciadosMu.com.br              \\
+// Creditos: shop@viciadosmu.com.br | skype viciadosmu \\
+// Disponibilizamos para ajudar a todos                \\
+// Compre produtos ou jogue em nossos servidores       \\
+// Shop ViciadosMu: wWw.Shop.ViciadosMu.com.br         \\
+// --------------------------------------------------- \\
+
+Altere as configurações do site em modules/settings.php
+
+---------------------------------------------------------
+
+Corrigir erro "Sua conta não esta confirmada" ao tentar logar no site com alguma conta que já estava criada.
+Rode essa query na DB MuOnline:
+
+UPDATE MEMB_INFO SET mail_chek = 1
+
+---------------------------------------------------------
+
+Como colocar GM / Sub ADM / ADM no site
+
+Basta rodar essas query, depois de ter feito as alterações.
+
+Colocar GM no site
+
+USE [CTM_TeaM]
+GO
+
+INSERT INTO dbo.CTM_WebStaff (account,name,type,contact) VALUES ('Login','Nome_do_Char',1,'Contato')
+GO
+
+---------------------------------------------------------
+
+Colocar Sub ADM  no site
+
+USE [CTM_TeaM]
+GO
+
+INSERT INTO dbo.CTM_WebStaff (account,name,type,contact) VALUES ('Login','Nome_do_Char',2,'Contato')
+GO
+
+---------------------------------------------------------
+
+Colocar ADM no site
+
+USE [CTM_TeaM]
+GO
+
+INSERT INTO dbo.CTM_WebStaff (account,name,type,contact) VALUES ('Login','Nome_do_Char',3,'Contato')
+GO
+
+---------------------------------------------------------
+
+Legenda:
+
+Troque onde esta Login pelo Login que você vai botar de GM,SUB ou ADM
+
+Troque onde esta Nome_do_Char pelo nome do char que você vai botar de GM,SUB ou ADM
+ 
+Troque onde esta Contato por algum meio de contato, como e-mail, facebook, telefone ou etc...
