@@ -34,7 +34,7 @@ class Version
 	{
 		$this->real_version = $version;
 		$this->full_version = $full_version;
-		$this->number_version = eregi_replace("[^0-9\.]", NULL, $version);
+		//$this->number_version = eregi_replace("[^0-9\.]", NULL, $version);
 		$this->hex_version = $this->getHexVersion($this->number_version);
 	}
 
@@ -66,7 +66,7 @@ class Version
 				echo '<address>Nosso sistema encontra-se em atualiza&ccedil;&atilde;o no momento.</address>'."\r\n";
 				echo '<hr />'."\r\n";
 				echo '<h3>Mensagem destinada ao administrador:</h3>'."\r\n";
-				echo '<address>Pegue a chave de update da vers&atilde;o x no <b>'.$this->product_info['changelog'].'</b> da '.$this->product_info['name'].' e insira na <b>'.$this->product['location'].'</b></address>'."\r\n";
+				//echo '<address>Pegue a chave de update da vers&atilde;o x no <b>'.$this->product_info['changelog'].'</b> da '.$this->product_info['name'].' e insira na <b>'.$this->product['location'].'</b></address>'."\r\n";
 				echo '</body>'."\r\n";
 				echo '</html>';
 

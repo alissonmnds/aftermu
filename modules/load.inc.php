@@ -29,13 +29,13 @@ define("IN_EFFECTWEB", "47e5098c88cc5f67543414ff1af32efc");
 
 # Web Info
 $CTM = array("CTM_WebStaff", "CTM_WebRecord", "CTM_WebFiles", "CTM_WebTickets", "CTM_WebProfile", "CTM_WebWarning", "CTM_WebNews", "CTM_WebAccBan", "CTM_WebCharBan", "CTM_WebTicketRes", "CTM_WebPayments", "CTM_WebPaymentRes","CTM_WebRaffles", "CTM_WebCronJob", "CTM_WebRecovery", "CTM_WebPoll", "CTM_WebPollAnswers", "CTM_WebPollVotes", "CTM_WebRegister", "CTM_WebChangeMail","CTM_WebScreenShots", "CTM_WebScreenVotes", "CTM_WebScreenComments","CTM_WebNewsComments");
-$CTM[C] = array(CHAR_IMAGE_COLUMN, EXTRA_VAULT_COLUMN);
+//$CTM[C] = array(CHAR_IMAGE_COLUMN, EXTRA_VAULT_COLUMN);
 define("Product", "Effect Web");
 
 # Version
 $version = new Version();
 $version->setVersion("v1.8.5", "v1.8.5 Finish Edition");
-$version->compareVersions(constant("Update_Key"), true);
+$version->compareVersions(constant("Update_Key"), false);
 
 # Login
 if(!empty($_SESSION['Hash_Account']))

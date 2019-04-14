@@ -197,7 +197,7 @@ class CTM_Crypt extends CTM_General
 		);
 		return strtr($CTM_Crypt, $Return);
 	}
-	public function CallSecuritySite()
+	public function CallSecuritySite1()
 	{
 		if(parent::CallSecuritySite("B6A013A69733B5B30DCFCE78CD37B6DC") != "YTc2ZGJiMmZlNDY5ZThkNzkwYmU0ZjJhYWUyNDUwMDI=")
 			exit("Files corrupted.");

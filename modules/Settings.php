@@ -43,7 +43,7 @@ define("L_CharKingOfPVP", "ViciadosMu"); // -- Personagem Rei do PVP
 define("L_CharUFC", "ViciadosMu"); // -- Personagem UFC MU
 define("L_Help", "#"); // -- Link de ajuda
 define("L_Show_MGuild", false); // -- Mostrar melhor Guild  
-define("L_Help", "#"); // -- Link para página de ajuda (msg que aparece no topo da parte do conteúdo)
+//define("L_Help", "#"); // -- Link para página de ajuda (msg que aparece no topo da parte do conteúdo)
 define("L_MGuild", "#"); // -- Pagina sobre o Rei do crash
 define("L_SChash", "#"); // -- Pagina sobre o Sorteio de Cash
 define("L_AboutKing", "#"); // -- Pagina sobre Rei do Script
@@ -61,9 +61,9 @@ define("Show_ChatHome", true); // -- Opção Template TUKKER --- Exbir Chat (tru
 	@ true = Sim
 	@ false = Não
 *****************************************************************************/
-define("MSSQL_Host", "127.0.0.1"); // -- Host do MSSQL (Padrão -> 127.0.0.1)
+define("MSSQL_Host", "138.255.10.199"); // -- Host do MSSQL (Padrão -> 127.0.0.1)
 define("MSSQL_User", "sa"); // -- Usuario do MSSQL (Padrão -> sa)
-define("MSSQL_Pass", "123456"); // -- Senha do MSSQL
+define("MSSQL_Pass", "1AfterMuonline2"); // -- Senha do MSSQL
 define("MSSQL_DB", "CTM_Team"); // -- DataBase do Web Site (Padrão -> CTM_TeaM)
 define("MuAcc_DB", "MuOnline"); // -- DataBase das contas [Geralmente = Me_MuOnline] (Padrão -> MuOnline)
 define("MuGen_DB", "MuOnline"); // -- DataBase geral do server (Padrão -> MuOnline)
